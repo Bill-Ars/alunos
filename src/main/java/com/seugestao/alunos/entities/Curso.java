@@ -19,12 +19,5 @@ public class Curso {
     private Long id;
 
     private String nome;
-
-    // Um curso tem muitos alunos
-    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL)
-    private List<Aluno> alunos = new ArrayList<>();
-
-    public Curso(String nome) {
-        this.nome = nome;
-    }
+    
 }

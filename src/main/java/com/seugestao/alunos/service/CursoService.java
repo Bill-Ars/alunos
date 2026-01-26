@@ -1,5 +1,8 @@
 package com.seugestao.alunos.service;
 
+
+import com.seugestao.alunos.dto.curso.CursoRequestDTO;
+import com.seugestao.alunos.dto.curso.CursoResponseDTO;
 import com.seugestao.alunos.entities.Curso;
 import com.seugestao.alunos.repository.CursoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,23 +16,56 @@ public class CursoService {
     @Autowired
     private CursoRepo repo;
 
-    public void create(Curso curso){
+    // ==============================
+    // Criar curso
+    // ==============================
+    public void create(CursoRequestDTO dto){
+        Curso curso = new Curso();
+        curso.setNome(dto.getNome());
         repo.save(curso);
     }
 
-    public void update(Curso curso){
+    // ==============================
+    // Atualizar curso
+    // ==============================
+    public void update(Long id, CursoRequestDTO dto){
+        Curso curso = repo.findById(id).orElseThrow();
+        curso.setNome(dto.getNome());
         repo.save(curso);
     }
 
+    // ==============================
+    // Deletar curso
+    // ==============================
     public void delete(Long id){
         repo.deleteById(id);
     }
 
-    public Curso pegarPorId(Long id){
-        return repo.findById(id).orElse(new Curso());
+    // ==============================
+    // Buscar curso por ID → DTO
+    // ==============================
+    public CursoResponseDTO pegarPorId(Long id){
+        Curso curso = repo.findById(id).orElseThrow();
+        return toDTO(curso);
     }
 
-    public List<Curso> listar(){
-        return repo.findAll();
+    // ==============================
+    // Listar cursos → DTO
+    // ==============================
+    public List<CursoResponseDTO> listar(){
+        return repo.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    // ==============================
+    // Conversão Entity → DTO
+    // ==============================
+    private CursoResponseDTO toDTO(Curso curso){
+        return new CursoResponseDTO(
+                curso.getId(),
+                curso.getNome()
+        );
     }
 }

@@ -11,6 +11,7 @@ import lombok.*;
 
 @EqualsAndHashCode(of = "id")
 
+
 public class Aluno {
 
     @Id
